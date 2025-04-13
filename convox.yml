@@ -1,0 +1,34 @@
+services:
+  appserver:
+    build: .
+    port: 80  # Port mặc định của Apache trong container
+    environment:
+      - DRUPAL_DATABASE_HOST=database
+      - DRUPAL_DATABASE_PORT=3306
+      - DRUPAL_DATABASE_NAME=drupal11
+      - DRUPAL_DATABASE_USER=drupal11
+      - DRUPAL_DATABASE_PASSWORD=drupal11
+    scale:
+      count: 1
+      cpu: 256
+      memory: 512
+  database:
+    image: mysql:8.0
+    port: 3306  # Port mặc định của MySQL
+    environment:
+      - MYSQL_DATABASE=drupal11
+      - MYSQL_USER=drupal11
+      - MYSQL_PASSWORD=drupal11
+      - MYSQL_ROOT_PASSWORD=drupal11
+    scale:
+      count: 1
+      cpu: 256
+      memory: 512
+    volumes:
+      - database:/var/lib/mysql
+    arguments:
+      [ '@?', '@?' ]
+
+resources:
+  database:
+    type: volume
